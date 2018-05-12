@@ -7,16 +7,16 @@ function bucarPelicula() {
         url: "http://www.omdbapi.com/?s=" + $("#pelicula").val() + "&type=movie&apikey=e6136fd6",
         success: function (result) {
             if (result.Response === 'True') {
-                console.log(result, "ha ido bien");
+                console.log(result, "buscarPelicula() OK");
                 ListaPeliculas = result;
                 addPelicula(ListaPeliculas);
 
             } else {
-                console.log(result, "NO ha ido bien");
+                console.log(result, "buscarPelicula() ERROR");
             }
         },
         error: function (result) {
-            console.log(result, "NO ha ido bien");
+            console.log(result, "SIN CONEXION CON API");
         }
     });
 }
@@ -25,10 +25,6 @@ function mostrarPeliculas() {
     for (let i = 0; i < ListaPeliculas.Search.length; i++) {
         console.log(ListaPeliculas.Search[i].Title);
     }
-}
-
-function noCargada(lol){
-    lol.src = "./imagen.jpg"
 }
 
 function addPelicula(ListaPeliculas) {
@@ -40,6 +36,7 @@ function addPelicula(ListaPeliculas) {
             '    <p class="card-text">Año: ' + ListaPeliculas.Search[i].Year + '</p>\n' +
             '	</div>')
     }
+	
 function detallar(idDetalle){
     $.ajax({
         url: 'http://www.omdbapi.com/?i=' + idDetalle + '&apikey=e6136fd6',
@@ -61,17 +58,20 @@ function detallar(idDetalle){
     })
 }
 
-    win.scroll(function () {
-        if ($(document).height() - win.height() <= (win.scrollTop() + 80)) {
-            contpage++;
-            $.ajax({
-                url: "http://www.omdbapi.com/?s=" + $('#pelicula').val() + "&type=movie&page=" + contpage + "&apikey=e6136fd6",
-                success: function (denuevo) {
-                    addPelicula(denuevo);
-                }
-            });
-        }
-    });
+win.scroll(function () {
+	if ($(document).height() - win.height() <= (win.scrollTop() + 80)) {
+		contpage++;
+		$.ajax({
+			url: "http://www.omdbapi.com/?s=" + $('#pelicula').val() + "&type=movie&page=" + contpage + "&apikey=e6136fd6",
+			success: function (denuevo) {
+				addPelicula(denuevo);
+			}
+		});
+	}
+});
 	
+function noCargada(imagen){
+    imagen.src = "./imagen.jpg"
+}
 
 }
